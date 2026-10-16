@@ -13,7 +13,8 @@ app.post("/reprice", (request, response) => {
 
   if (!isProductArray(body)) {
     response.status(400).json({
-      error: "Ожидается массив товаров: проверьте поля, цены, диапазон и конкурентов.",
+      error:
+        "Ожидается массив товаров: проверьте поля, цены, диапазон и конкурентов.",
     });
     return;
   }
@@ -24,14 +25,26 @@ app.post("/reprice", (request, response) => {
 // After npm run build, the server also serves the React page.
 app.use(express.static(fileURLToPath(new URL("../client", import.meta.url))));
 
-const handleError: ErrorRequestHandler = (error: unknown, _request, response, _next) => {
+const handleError: ErrorRequestHandler = (
+  error: unknown,
+  _request,
+  response,
+  _next,
+) => {
   if (error instanceof SyntaxError && "body" in error) {
     response.status(400).json({ error: "Некорректный JSON." });
     return;
   }
 
-  if (typeof error === "object" && error !== null && "status" in error && error.status === 413) {
-    response.status(413).json({ error: "Размер тела запроса не должен превышать 1 МБ." });
+  if (
+    typeof error === "object" &&
+    error !== null &&
+    "status" in error &&
+    error.status === 413
+  ) {
+    response
+      .status(413)
+      .json({ error: "Размер тела запроса не должен превышать 1 МБ." });
     return;
   }
 
